@@ -1,24 +1,6 @@
 DOMP（Docker + Openresty + MySQL8.x + PHP7.3.4 + Redis）是一款全功能的**LNMP一键安装程序**。
 
 
-# 目录
-- [1.目录结构](#1目录结构)
-- [2.快速使用](#2快速使用)
-- [3.切换PHP版本](#3切换php版本)
-- [4.添加快捷命令](#4添加快捷命令)
-- [5.使用Log](#5使用log)
-    - [5.1 Nginx日志](#51-nginx日志)
-    - [5.2 PHP-FPM日志](#52-php-fpm日志)
-    - [5.3 MySQL日志](#53-mysql日志)
-- [6.使用composer](#6使用composer)
-- [7.数据库管理](#7数据库管理)
-    - [7.1 phpMyAdmin](#71-phpmyadmin)
-    - [7.2 phpRedisAdmin](#72-phpredisadmin)
-- [8.在正式环境中安全使用](#8在正式环境中安全使用)
-- [9.常见问题](#9常见问题)
-    - [9.1 如何在PHP代码中使用curl？](#91-如何在php代码中使用curl)
-
-
 ## 1.目录结构
 
 ```
