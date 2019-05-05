@@ -10,8 +10,8 @@ services:
             - ${NGINX_APPLICATION_DIR}:/data:rw
             - ${NGINX_DOCKER_CONF_ROOT}/nginx-vhosts:/data/nginx-vhosts:ro
             - ${NGINX_DOCKER_CONF_ROOT}/conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
-            - ${DOCKER_VAR_ROOT}/openresty:/data/wwwlogs:rw
-            - ${DOCKER_VAR_ROOT}/openresty/log:/var/log:rw
+            - ${DOCKER_ROOT}/var/log/openresty:/data/wwwlogs:rw
+            - ${DOCKER_ROOT}/var/log/openresty:/var/log:rw
         container_name: openresty
         shm_size: 64M
         stdin_open: true
@@ -77,11 +77,12 @@ services:
           - ${PHP_APPLICATION_ROOT_DIR}:/data:rw
           - ${PHP_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
           - ${PHP_FPM_CONF_FILE}:/usr/local/etc/php-fpm.conf:ro
-          - ${DOCKER_VAR_ROOT}/log/php:/var/log:rw
-          - ${DOCKER_VAR_ROOT}/log/php:/usr/local/var/log:rw
-          - ${DOCKER_VAR_ROOT}/run:/usr/local/var/run:rw
+          - ${DOCKER_ROOT}/var/log/fpm:/var/log:rw
+          - ${DOCKER_ROOT}/var/log/fpm:/usr/local/var/log:rw
+          - ${DOCKER_ROOT}/var/run:/usr/local/var/run:rw
+          - ${DOCKER_ROOT}/var/log/fpm:/data/wwwlogs:rw
           - /dev/null:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini:ro
-          - /data/docker/php/php.d/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+          - /data/docker/fpm/php.d/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
         container_name: fpm
         shm_size: 64M
         stdin_open: true
