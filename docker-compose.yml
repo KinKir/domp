@@ -7,41 +7,21 @@ services:
            - "${NGINX_HTTP_HOST_PORT}:80"
            - "${NGINX_HTTPS_HOST_PORT}:443"
         volumes:
-            - ${NGINX_APPLICATION_DIR}:/data:rw
+            - ${NGINX_APPLICATION_DIR}:/data/source:ro
             - ${NGINX_DOCKER_CONF_ROOT}/nginx-vhosts:/data/nginx-vhosts:ro
             - ${NGINX_DOCKER_CONF_ROOT}/conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
             - ${DOCKER_ROOT}/var/log/openresty:/data/wwwlogs:rw
-            - ${DOCKER_ROOT}/var/log/openresty:/var/log:rw
+            - ${DOCKER_ROOT}/var/log/openresty/log:/var/log:rw
         container_name: openresty
         shm_size: 64M
         stdin_open: true
         tty: true
         links:
-          - fpm
           - redis
         restart: "no"
         networks:
             default:
                 ipv4_address: ${NGINX_IP}
-
-    mysql:
-        pid: "host"
-        image: mysql:${MYSQL_VERSION}
-        ports:
-          - "${MYSQL_HOST_PORT}:3306"
-        volumes:
-          - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
-          - ${MYSQL_DATA_DIR}:/var/lib/mysql/:rw
-        container_name: mysql
-        shm_size: 64M
-        stdin_open: true
-        tty: true
-        restart: "no"
-        environment:
-          MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-        networks:
-            default:
-                ipv4_address: ${MYSQL_IP}
 
     redis:
         pid: "host"
@@ -65,41 +45,6 @@ services:
         networks:
             default:
                 ipv4_address: ${REDIS_IP}
-
-    fpm:
-        pid: "host"
-        image: jim19770812/php-fpm:7.3.4-fpm-alpine3.9-sz
-#        build:
-#          context: .
-        ports:
-          - "${PHP_LISTEN_HOST_PORT}:9000"
-        volumes:
-          - ${PHP_APPLICATION_ROOT_DIR}:/data:rw
-          - ${PHP_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
-          - ${PHP_FPM_CONF_FILE}:/usr/local/etc/php-fpm.conf:ro
-          - ${DOCKER_ROOT}/var/log/fpm:/var/log:rw
-          - ${DOCKER_ROOT}/var/log/fpm:/usr/local/var/log:rw
-          - ${DOCKER_ROOT}/var/run:/usr/local/var/run:rw
-          - ${DOCKER_ROOT}/var/log/fpm:/data/wwwlogs:rw
-          - /dev/null:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini:ro
-          - /data/docker/fpm/php.d/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
-        container_name: fpm
-        shm_size: 64M
-        stdin_open: true
-        tty: true
-        restart: "no"
-        links:
-          - redis
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "1000"
-        command: "php-fpm"
-        working_dir: /data
-        networks:
-            default:
-                ipv4_address: ${PHP_IP}
 
 networks:
     default:
